@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+{% block body %}
+<div class="container-fluid">
+	<form method= "post">
+		<label>Please enter your choices: </label>
+		{% csrf_token%}
+		{{ form.as_p}}
+		{{ formset.management_form }}
+			<table>
+        		<h2>Choices</h2>
+        		{% if formset.non_form_errors %}
+           			<p>{{ formset.non_form_errors }}</p>
+       			{% endif %}
+       			{% for form in formset %}
+       				{{ form }}
+      			{% endfor %}
+    		</table>
+		<button type="submit" class="btn btn-primary">Add Choices</button>
+	</form>
+	{% if error_message %}
+	<h2> {{ error_message }} </h2>	  
+	{% endif %}
+	<br>
+</div>
+{%endblock%}
+
+<h1>{{ question.question_text }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
