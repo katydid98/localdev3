@@ -9,26 +9,28 @@
 		    <label for="enteringquestion">Please enter a Question: </label>
 		    	{% csrf_token%}
 				{{ form.as_p}}
-				{{ questionchoices.management_form }}
-				<table>
-        			<label>Please enter your choices:</label>
-        			{% if formset.non_form_errors %}
-           				<p>{{ formset.non_form_errors }}</p>
-       				{% endif %}
-        			{% for form in questionchoices %}
-        				{{ form }}
-        			{% endfor %}
-    			</table>
+				 <fieldset>
+                	<label for="enteringchoices">Enter Choices: </label>
+               		 <br>
+	                {{ choice_form.management_form }}
+	                {{ choice_form.non_form_errors }}
+	                {% for form in choice_form %}
+                    	{{ form }}
+                	{% endfor %}
+            	</fieldset>
 		</div>
     <button type="submit" class="btn btn-primary">Add your choices</button>
 	</form>
 	{% if error_message %}
 	<h2> {{ error_message }} </h2>	  
 	{% endif %}
-	
-	<br>
+
 </div>
 {%endblock%}
+
+
+
+
 
 
 
