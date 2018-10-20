@@ -1,70 +1,90 @@
+
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
-from .models import Choice, Question
+from .models import Choice, Question, Company
 from django.views.generic.edit import CreateView
-from .forms import QuestionForm, ChoiceForm, ChoiceInlineFormSet
+from .forms import QuestionForm, ChoiceInlineFormSet
 from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import redirect
-from datetime import datetime
+# from django.shortcuts import redirect
+import json
 
 
-class QuestionChoiceCreate(CreateView):
+def get_companies(request):
+    if request.is_ajax():
+        q = request.GET.get('term', '')
+        companies = Company.objects.filter(name__startswith=q)
+        results = []
+        for c in companies:
+            company_json = {}
+            company_json['id'] = c.pk
+            company_json['label'] = c.name
+            company_json['value'] = c.name
+            results.append(company_json)
+        data = json.dumps(results)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
+
+
+class QuestionCreate(CreateView):
     template_name = 'polls/question_form.html'
+    model = Question
     form_class = QuestionForm
-    success_url = reverse_lazy('polls:index')  
-    def get_context_data(self, *args, **kwargs):
-        context = super(QuestionChoiceCreate, self).get_context_data(*args,**kwargs)
-        context['pub_date'] = datetime.now()
-        if self.request.POST:
-            context['questionchoices'] = ChoiceInlineFormSet(self.request.POST)
-        else:
-            context['questionchoices'] = ChoiceInlineFormSet()
-        return context
-
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        questionchoices = context['questionchoices']
-        if questionchoices.is_valid():
-            # self.object= form.save(commit=False)
-            print(questionchoices)
-            print(self.object)
-            self.object = form.save()
-            questionchoices.instance = self.object
-            questionchoices.save()
-            return redirect(self.success_url)
-        else:
-            return self.render_to_response(self.get_context_data(form=form))
-
-
-class ChoicesCreate(CreateView):
-    model = Choice
-    form_class = ChoiceInlineFormSet
     success_url = reverse_lazy('polls:index')
 
-    def get_context_data(self, **kwargs):
-        data = super(ChoicesCreate, self).get_context_data(**kwargs)
-        if self.request.POST:
-            data['choicequestions'] = ChoiceInlineFormSet(self.request.POST)
-        else:
-            data['choicequestions'] = ChoiceInlineFormSet()
-        return data
+    def get(self, request, *args, **kwargs):
+        """
+        Handles GET requests. Instantiates blank versions of the form
+        and its inline formsets.
+        """
+        self.object = None
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        choice_form = ChoiceInlineFormSet()
+        return self.render_to_response(
+            self.get_context_data(form=form,
+                                  choice_form=choice_form))
 
-    def form_valid(self, form):
-        context = self.get_context_data()
-        choicequestions = context['choicequestions']
-        if choicequestions.is_valid():
-            self.object = form.save()
-            choicequestions.instance = self.object
-            choicequestions.save()
-            return HttpResponseRedirect(self.success_url)
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests. Instantiates a form instance and its inline
+        formsets with the passed POST inputs, then checks for
+        validity.
+        """
+        self.object = None
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        choice_form = ChoiceInlineFormSet(self.request.POST)
+        if (form.is_valid() and choice_form.is_valid()):
+            return self.form_valid(form, choice_form)
         else:
-            return self.render_to_response(self.get_context_data(form=form))
+            return self.form_invalid(form, choice_form)
+
+    def form_valid(self, form, choice_form):
+        """
+        If form is valid, creates a Question instance along with
+        associated Choices and redirects to index page.
+        """
+        self.object = form.save(commit=False)
+        self.object.pub_date = timezone.now()
+        self.object.save()
+        choice_form.instance = self.object
+        choice_form.save()
+        return HttpResponseRedirect(self.success_url)
+
+    def form_invalid(self, form, choice_form):
+        """
+        If form is invalid, re-renders the context data with the
+        data-filled forms and errors.
+        """
+        return self.render_to_response(self.get_context_data(form=form,
+                                       choice_form=choice_form))
 
 
 class IndexView(generic.ListView):
@@ -113,4 +133,5 @@ def vote(request, question_id):
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+        return HttpResponseRedirect(reverse('polls:results',
+                                            args=(question.id,)))
