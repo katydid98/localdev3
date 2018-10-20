@@ -14,22 +14,22 @@ from django.core.urlresolvers import reverse_lazy
 import json
 
 
-def get_companies(request):
-    if request.is_ajax():
-        q = request.GET.get('term', '')
-        companies = Company.objects.filter(name__startswith=q)
-        results = []
-        for c in companies:
-            company_json = {}
-            company_json['id'] = c.pk
-            company_json['label'] = c.name
-            company_json['value'] = c.name
-            results.append(company_json)
-        data = json.dumps(results)
-    else:
-        data = 'fail'
-    mimetype = 'application/json'
-    return HttpResponse(data, mimetype)
+# def get_companies(request):
+#     if request.is_ajax():
+#         q = request.GET.get('term', '')
+#         companies = Company.objects.filter(name__startswith=q)
+#         results = []
+#         for c in companies:
+#             company_json = {}
+#             company_json['id'] = c.pk
+#             company_json['label'] = c.name
+#             company_json['value'] = c.name
+#             results.append(company_json)
+#         data = json.dumps(results)
+#     else:
+#         data = 'fail'
+#     mimetype = 'application/json'
+#     return HttpResponse(data, mimetype)
 
 
 class QuestionCreate(CreateView):
