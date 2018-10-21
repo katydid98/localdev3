@@ -8,7 +8,7 @@
  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
  </script> <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
 
-
+{% load static %}
 {% block body %}
 <div class= "container-fluid">
 	<h1>Polls</h1>
@@ -24,7 +24,7 @@
 	                {{ choice_form.non_form_errors }}
 	                {% for form in choice_form %}
                     	{{ form }}
-                	{% endfor %}
+                	{% endfor %}s
             	</fieldset>
 		</div>
     <button type="submit" class="btn btn-primary">Add your choices</button>
@@ -33,16 +33,12 @@
 	<h2> {{ error_message }} </h2>	  
 	{% endif %}
 
-</div>
-  <script>
-  $( function() {
-    $( "#companiesList" ).autocomplete({
-      source: "{% url 'polls:company_autocomplete' %}"
-    });
-  });
-  </script>
+<script src="{% static 'polls/js/company_autocomplete.js' %}"></script>
 
+</div>
 {%endblock%}
+
+
 
 
 
