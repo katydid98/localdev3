@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.views.generic import RedirectView
+from django.core.urlresolvers import reverse_lazy
 
 urlpatterns = [
+    url(r'^$', RedirectView.as_view(url=reverse_lazy("polls:index")), name='home'),
     url(r'^polls/', include('polls.urls')),
     url(r'^admin/', admin.site.urls),
 ]
