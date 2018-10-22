@@ -1,8 +1,5 @@
-
-
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
@@ -14,39 +11,43 @@
 	<h1>Polls</h1>
 	<form method= "post">	
 		<div class="form-group">
-		    <label for="enteringquestion">Please enter a Question: </label>
+		    <label for="companiesList">Please enter a Company and Question: </label>
 		    	{% csrf_token%}
-				{{ form.as_p}}
-				 <fieldset>
+		    	{{ form.as_p}}
+				 <table>
                 	<label for="enteringchoices">Enter Choices: </label>
                		 <br>
 	                {{ choice_form.management_form }}
 	                {{ choice_form.non_form_errors }}
 	                {% for form in choice_form %}
                     	{{ form }}
-                	{% endfor %}s
-            	</fieldset>
+                	{% endfor %}
+            	</table>
 		</div>
-    <button type="submit" class="btn btn-primary">Add your choices</button>
+    <button type="submit" class="btn btn-primary" id="id_company">Add your choices</button>
+    
 	</form>
 	{% if error_message %}
 	<h2> {{ error_message }} </h2>	  
 	{% endif %}
 
-<script src="{% static 'polls/js/company_autocomplete.js' %}"></script>
+<script type="text/javascript">
+$(function() {
+    $("#companiesList").autocomplete({
+        source: "{% url 'polls:company_autocomplete' %}",
+        // select: function(event, ui) {
+        //     // $("#name_company").val(ui.item.value),
+        //     $("#id_company").val(ui.item.value) 
+        // }
+    });
+});
+	// $(document).ready(function(){
+	// 	$("#companiesList").autocomplete({source: "{% url 'polls:company_autocomplete' %}"});
+	// });
+</script>
 
 </div>
 {%endblock%}
-
-
-
-
-
-
-
-
-
-
 
 
 
