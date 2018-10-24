@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
@@ -30,25 +30,7 @@
 	<h2> {{ error_message }} </h2>	  
 	{% endif %}
 
-<script type="text/javascript">
-$(function() {
-    $("#companiesList").autocomplete({
-        source: "{% url 'polls:company_autocomplete' %}",
-        // select: function(event, ui) {
-        //     // $("#name_company").val(ui.item.value),
-        //     $("#id_company").val(ui.item.value) 
-        // }
-    });
-});
-	// $(document).ready(function(){
-	// 	$("#companiesList").autocomplete({source: "{% url 'polls:company_autocomplete' %}"});
-	// });
-</script>
+<script src="{% static 'polls/js/ajax_autocomplete.js' %}"></script>
 
 </div>
 {%endblock%}
-
-
-
-
-
