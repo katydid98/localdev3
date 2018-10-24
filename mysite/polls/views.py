@@ -12,7 +12,7 @@ from polls.forms import QuestionForm, ChoiceInlineFormSet
 import json
 
 
-def company_autocomplete(request):
+def autocomplete_companyData(request):
     if request.is_ajax():
         q = request.GET.get('term', '')
         companies = Company.objects.filter(name__startswith=q)
