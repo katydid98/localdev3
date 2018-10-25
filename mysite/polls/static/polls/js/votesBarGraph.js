@@ -1,44 +1,8 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<style>
 
-.bar {
-  fill: steelblue;
-}
-
-.bar:hover {
-  fill: brown;
-}
-
-.title {
-  font: bold 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-.axis {
-  font: 10px sans-serif;
-}
-
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-.x.axis path {
-  display: none;
-}
-
-</style>
-<body>
-<!-- <script src="d3.v3.min.js"></script> -->
-<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script>
-  // var source = "{% url 'polls:d3_voteData' question.id %}"
   var source ="js/data/data2.tsv"    
-</script>
 
-    <script>
+
+   
 
     var margin = {top: 80, right: 180, bottom: 80, left: 180},
         width = 960 - margin.left - margin.right,
@@ -126,7 +90,7 @@
       return d;
     }
 
-    </script>
+  
 
 
 
