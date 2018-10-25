@@ -65,7 +65,8 @@
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.json(source, type, function(error, data) {
+//change to d3.json when using real data
+    d3.tsv(source, type, function(error, data) {
       x.domain(data.map(function(d) { return d.name; }));
       y.domain([0, d3.max(data, function(d) { return d.value; })]);
 
