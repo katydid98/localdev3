@@ -12,6 +12,17 @@ from polls.forms import QuestionForm, ChoiceInlineFormSet
 import json
 
 
+# I DON'T KNOW HOW TO USE THIS IN D3 YET.
+# data to extract choices and votes into a dict list
+# [{'choice_text': u'hello', 'votes': 5}, {'choice_text': u'there', 'votes': 1}, {'choice_text': u'u', 'votes': 1}]
+def d3_voteData(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    choices_votes = question.choice_set.all().values('choice_text',
+                                                     'votes')
+    choices_list = list(choices_votes) # convert the QuerySet to a list object
+    return JsonResponse(choices_list, safe=False)
+
+
 def autocomplete_companyData(request):
     if request.is_ajax():
         q = request.GET.get('term', '')
