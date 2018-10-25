@@ -7,3 +7,9 @@
 </ul>
 
 <a href="{% url 'polls:detail' question.id %}">Vote again?</a>
+
+<div>
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+	<script> var source ="{% url 'polls:d3_voteData' question.id %}"</script>  
+	<script src="{% static 'polls/js/votesBarGraph.js' %}" ></script>	
+</div>
